@@ -1,0 +1,10 @@
+flask
+flask-login
+flask-sqlalchemy
+flask-cors
+flasgger
+oauthlib
+requests
+pymysql
+google-auth
+PyYAML

@@ -1,0 +1,325 @@
+---
+basePath: "/"
+definitions:
+  Data:
+    type: object
+  ResponseMessage:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      data:
+        type: array
+        items:
+          "$ref": "#/definitions/Data"
+
+info:
+  description: API Specification for Blog Project
+  termsOfService: "/tos"
+  title: Blog Project API
+  version: 1.0.0
+
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  "/post/":
+    post:
+      consumes:
+        - application/json
+      description: Create a post
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - name: blogpost
+          in: body
+          required: true
+          schema:
+            type: "object"
+            required:
+              - content
+              - title
+            properties:
+              title:
+                type: string
+                default: "nhyen"
+              content:
+                type: string
+                default: "nhyen xinh xinh"
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        500:
+          description: Internal Server Error Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        1000:
+          description: Invalid Request Data Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      summary: Create a post
+      tags:
+        - blogpost
+
+    get:
+      summary: Get post of a user
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - in: query
+          name: user_id
+          type: string
+          required: true
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - blogpost
+
+    put:
+      summary: Update a post
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - in: query
+          name: post_id
+          type: string
+          required: true
+        - name: blogpost
+          in: body
+          required: true
+          schema:
+            type: "object"
+            required:
+              - content
+              - title
+            properties:
+              title:
+                type: string
+                default: "nhyen"
+              content:
+                type: string
+                default: "nhyen xinh xinh"
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - blogpost
+
+  "/post/all":
+    get:
+      summary: Get all posts
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - blogpost
+
+    delete:
+      summary: Delete a post
+      parameters:
+        - in: query
+          name: post_id
+          type: string
+          required: true
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - blogpost
+
+  "/interaction/":
+    post:
+      consumes:
+        - application/json
+      description: Create a interaction
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - name: post_id
+          in: query
+          type: string
+          required: true
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        500:
+          description: Internal Server Error Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        1000:
+          description: Invalid Request Data Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      summary: Create a interaction
+      tags:
+        - interaction
+
+    get:
+      summary: Get interactions of a post
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - in: query
+          name: post_id
+          type: string
+          required: true
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - interaction
+
+    delete:
+      summary: Delete interaction
+      parameters:
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+        - in: query
+          name: post_id
+          type: string
+          required: true
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - interaction
+
+
+  "/user/":
+    put:
+      consumes:
+        - application/json
+      description: Update user information
+      parameters:
+        - name: userinfo
+          in: body
+          required: true
+          schema:
+            type: "object"
+            required:
+              - name
+              - mobile
+              - occupation
+            properties:
+              name:
+                type: string
+                default: "nhyen"
+              mobile:
+                type: string
+                default: "0123445678"
+              occupation:
+                type: string
+                default: "student"
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        500:
+          description: Internal Server Error Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+        1000:
+          description: Invalid Request Data Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      summary: Update user information
+      tags:
+        - user
+
+    get:
+      summary: Get user information
+      parameters:
+        - in: query
+          name: user_id
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - user
+
+
+  "/user/login/{acc_type}":
+    get:
+      summary: Login by Facebook or Google account
+      parameters:
+        - in: path
+          name: acc_type
+          type: string
+          required: true
+          enum:
+            - facebook
+            - google
+      responses:
+        201:
+          description: Successfully Created Message
+          schema:
+            "$ref": "#/definitions/ResponseMessage"
+      tags:
+        - user
+
+security:
+  - bearerAuth: []
+
+swagger: '2.0'
