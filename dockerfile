@@ -13,4 +13,4 @@ COPY ./requirements.txt /
 
 RUN pip3 install -r /requirements.txt
 ADD / /
-ENTRYPOINT cd /source && python3 app.py
+ENTRYPOINT cd /src && python3 app.py
